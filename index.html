@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>Calvary Prescott — Cleaning Crew</title>
+<style>
+:root{
+  --navy:#1E4976;--cyan:#2DBFED;--cyan-light:#e8f7fd;--navy-light:#e8eef5;
+  --green:#16a34a;--green-light:#dcfce7;--red:#dc2626;--red-light:#fee2e2;
+  --amber:#d97706;--amber-light:#fef3c7;--gray:#6b7280;--gray-light:#f3f4f6;
+  --white:#fff;--text:#111827;--text-soft:#4b5563;
+  --radius:14px;--shadow:0 2px 12px rgba(0,0,0,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f4f8;color:var(--text);min-height:100vh;overscroll-behavior:none;}
+
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* HEADER */
+.app-header{background:var(--navy);color:#fff;padding:14px 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--cyan);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.header-titles{flex:1;}
+.header-titles h1{font-size:16px;font-weight:700;line-height:1.2;}
+.header-titles .sub{font-size:11px;opacity:.75;}
+.header-right{display:flex;gap:8px;align-items:center;}
+.back-btn{background:rgba(255,255,255,.15);border:none;color:#fff;padding:7px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;}
+.back-btn:active{background:rgba(255,255,255,.25);}
+
+/* CONTENT */
+.content{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;max-width:540px;width:100%;margin:0 auto;}
+
+/* CARDS */
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;}
+.card-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);margin-bottom:12px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;border-radius:11px;font-size:15px;font-weight:700;border:none;cursor:pointer;transition:transform .1s,filter .15s;width:100%;}
+.btn:active{transform:scale(.97);}
+.btn-navy{background:var(--navy);color:#fff;}
+.btn-cyan{background:var(--cyan);color:#fff;}
+.btn-green{background:var(--green);color:#fff;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-outline{background:transparent;border:2px solid var(--navy);color:var(--navy);}
+.btn-ghost{background:rgba(255,255,255,.18);color:#fff;border:none;}
+.btn-gray{background:var(--gray-light);color:var(--text);}
+.btn-sm{padding:8px 13px;font-size:13px;width:auto;border-radius:9px;}
+.btn:disabled{opacity:.4;pointer-events:none;}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* INPUTS */
+.input{width:100%;padding:12px 14px;border:2px solid #e5e7eb;border-radius:11px;font-size:15px;outline:none;transition:border-color .2s;font-family:inherit;}
+.input:focus{border-color:var(--cyan);}
+.label{font-size:13px;font-weight:600;color:var(--text-soft);margin-bottom:5px;display:block;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.badge-green{background:var(--green-light);color:var(--green);}
+.badge-cyan{background:var(--cyan-light);color:#0e7490;}
+.badge-amber{background:var(--amber-light);color:var(--amber);}
+.badge-gray{background:var(--gray-light);color:var(--gray);}
+
+/* ONLINE DOT */
+.online-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;}
+.online-dot.offline{background:#ef4444;}
+
+/* HOME */
+.home-hero{background:linear-gradient(135deg,var(--navy) 0%,#2563a8 100%);color:#fff;border-radius:var(--radius);padding:22px 20px;text-align:center;}
+.home-hero .title{font-size:24px;font-weight:800;margin-bottom:4px;}
+.home-hero .date{font-size:13px;opacity:.8;}
+.role-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.role-btn{background:var(--white);border:2px solid #e5e7eb;border-radius:var(--radius);padding:20px 12px;cursor:pointer;text-align:center;transition:border-color .2s,box-shadow .2s;}
+.role-btn:active{transform:scale(.97);}
+.role-btn.selected{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(45,191,237,.15);}
+.role-btn .icon{font-size:30px;margin-bottom:7px;}
+.role-btn .name{font-size:15px;font-weight:700;}
+.role-btn .desc{font-size:11px;color:var(--gray);margin-top:3px;}
+
+/* PIN PAD */
+.pin-display{font-size:30px;letter-spacing:10px;text-align:center;padding:12px;color:var(--navy);font-weight:800;min-height:54px;}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:270px;margin:0 auto;}
+.pin-btn{padding:17px;font-size:21px;font-weight:700;background:var(--gray-light);border:none;border-radius:11px;cursor:pointer;}
+.pin-btn:active{background:#d1d5db;}
+
+/* BUILDING LIST */
+.building-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:transform .1s,box-shadow .15s;}
+.building-card:active{transform:scale(.98);}
+.building-card:hover{box-shadow:0 4px 18px rgba(0,0,0,.13);}
+.bld-emoji{font-size:28px;flex-shrink:0;}
+.bld-info{flex:1;}
+.bld-name{font-size:16px;font-weight:700;}
+.bld-sub{font-size:12px;color:var(--gray);margin-top:2px;}
+.bld-progress{height:5px;background:#e5e7eb;border-radius:3px;margin-top:8px;overflow:hidden;}
+.bld-progress-fill{height:100%;background:var(--cyan);border-radius:3px;transition:width .4s;}
+.bld-arrow{font-size:18px;color:#d1d5db;}
+
+/* BUILDING SCREEN — ACTIVE TASK PANEL (pinned top) */
+.active-task-banner{background:linear-gradient(135deg,var(--navy),#1a5294);color:#fff;padding:18px 16px 16px;border-radius:0 0 var(--radius) var(--radius);margin:-16px -16px 0;/* overrides content padding */}
+.atb-label{font-size:11px;opacity:.75;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.atb-task{font-size:20px;font-weight:800;margin-bottom:14px;line-height:1.2;}
+.atb-timer{font-size:48px;font-weight:800;font-variant-numeric:tabular-nums;text-align:center;letter-spacing:-.02em;margin-bottom:14px;}
+.atb-status{font-size:12px;text-align:center;opacity:.75;margin-top:-10px;margin-bottom:10px;}
+.atb-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.atb-note{margin-top:12px;}
+.atb-note textarea{width:100%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:9px;color:#fff;padding:9px 12px;font-size:13px;font-family:inherit;resize:none;outline:none;}
+.atb-note textarea::placeholder{color:rgba(255,255,255,.5);}
+.atb-note-label{font-size:11px;opacity:.7;margin-bottom:4px;}
+
+/* TASK LIST ITEMS */
+.task-item{display:flex;align-items:flex-start;gap:11px;padding:13px;background:var(--gray-light);border-radius:11px;margin-bottom:8px;cursor:pointer;transition:background .15s;}
+.task-item:active{background:#e5e7eb;}
+.task-item.done{background:var(--green-light);cursor:default;}
+.task-item.mine-active{background:var(--cyan-light);border:1.5px solid var(--cyan);}
+.task-item.mine-paused{background:var(--amber-light);border:1.5px solid var(--amber);}
+.task-check{width:23px;height:23px;border-radius:7px;border:2px solid #d1d5db;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;margin-top:1px;}
+.task-item.done .task-check{background:var(--green);border-color:var(--green);color:#fff;}
+.task-item.mine-active .task-check{background:var(--cyan);border-color:var(--cyan);color:#fff;}
+.task-item.mine-paused .task-check{background:var(--amber);border-color:var(--amber);color:#fff;}
+.task-body{flex:1;min-width:0;}
+.task-name{font-size:14px;font-weight:600;line-height:1.3;}
+.task-item.done .task-name{text-decoration:line-through;color:var(--gray);}
+.task-meta{font-size:11px;color:var(--gray);margin-top:3px;}
+.task-note-preview{font-size:11px;color:var(--amber);margin-top:3px;font-style:italic;}
+.task-time{font-size:12px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;flex-shrink:0;margin-top:3px;}
+.task-item.done .task-time{color:var(--green);}
+
+/* TASK NOTE EXPAND */
+.task-note-area{padding:0 13px 13px;margin-top:-4px;}
+.task-note-area textarea{width:100%;border:1.5px solid #e5e7eb;border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit;resize:none;outline:none;background:var(--white);}
+.task-note-area textarea:focus{border-color:var(--cyan);}
+.task-note-save{margin-top:6px;text-align:right;}
+
+/* COORD TABS */
+.tabs{display:flex;background:#e5e7eb;border-radius:11px;padding:3px;gap:2px;}
+.tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:600;border-radius:9px;cursor:pointer;transition:background .15s,color .15s;color:var(--gray);}
+.tab.active{background:var(--white);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+
+/* COORD BUILDING ROW */
+.coord-bld{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px;}
+.coord-bld-header{display:flex;align-items:center;gap:10px;padding:13px 15px;background:var(--navy-light);cursor:pointer;}
+.coord-bld-header .emoji{font-size:20px;}
+.coord-bld-header .name{font-weight:700;flex:1;font-size:15px;}
+.coord-bld-body{padding:12px 15px;}
+.crew-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #f3f4f6;}
+.crew-row:last-child{border-bottom:none;}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.crew-info{flex:1;}
+.crew-name{font-size:13px;font-weight:700;}
+.crew-task-name{font-size:12px;color:var(--gray);}
+
+/* SUMMARY GRID */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.summary-stat{text-align:center;padding:12px 8px;background:var(--gray-light);border-radius:11px;}
+.summary-stat .val{font-size:22px;font-weight:800;color:var(--navy);}
+.summary-stat .lbl{font-size:11px;color:var(--gray);margin-top:2px;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;}
+.modal-handle{width:40px;height:4px;background:#d1d5db;border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-size:17px;font-weight:800;margin-bottom:14px;}
+
+/* MISC */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;}
+.spinner{width:20px;height:20px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pulse{animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.text-center{text-align:center;}
+.text-sm{font-size:12px;color:var(--gray);}
+.mt-8{margin-top:8px;}
+.note-item{padding:9px 11px;background:var(--amber-light);border-left:3px solid var(--amber);border-radius:0 9px 9px 0;margin-bottom:7px;font-size:13px;}
+.insight-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;}
+.insight-row:last-child{border-bottom:none;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div id="s-home" class="screen active">
+  <div class="app-header">
+    <div class="logo">⛪</div>
+    <div class="header-titles"><div class="sub">Calvary Prescott</div><h1>Cleaning Crew</h1></div>
+    <div class="header-right"><div class="online-dot" id="home-dot"></div></div>
+  </div>
+  <div class="content">
+    <div class="home-hero">
+      <div class="title">Ready to clean? 🧹</div>
+      <div class="date" id="home-date"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">I am joining as…</div>
+      <div class="role-btns">
+        <div class="role-btn" id="role-crew" onclick="selectRole('crew')">
+          <div class="icon">🧹</div><div class="name">Crew Member</div><div class="desc">Log my tasks</div>
+        </div>
+        <div class="role-btn" id="role-coord" onclick="selectRole('coord')">
+          <div class="icon">📋</div><div class="name">Coordinator</div><div class="desc">Manage session</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="name-card" style="display:none;">
+      <label class="label">Your name</label>
+      <input class="input" id="crew-name-input" placeholder="e.g. Maria L." maxlength="30" oninput="checkHomeReady()"/>
+    </div>
+    <div class="card" id="coord-pin-card" style="display:none;">
+      <div class="card-title">Coordinator PIN</div>
+      <div class="pin-display" id="home-pin-display">_ _ _ _</div>
+      <div class="pin-grid" id="home-pin-grid"></div>
+    </div>
+    <button class="btn btn-navy" id="join-btn" onclick="joinSession()" disabled>
+      <span id="join-btn-text">Select a role to continue</span>
+    </button>
+    <button class="btn btn-gray btn-sm" style="width:auto;align-self:center;" onclick="showScreen('s-history')">📂 Session History</button>
+  </div>
+</div>
+
+<!-- ═══════════ CREW — BUILDING LIST ═══════════ -->
+<div id="s-crew-home" class="screen">
+  <div class="app-header">
+    <div class="logo">🧹</div>
+    <div class="header-titles"><div class="sub" id="crew-date-sub"></div><h1 id="crew-name-header">Crew</h1></div>
+    <div class="header-right">
+      <div class="online-dot" id="crew-dot"></div>
+      <button class="back-btn" onclick="leaveSession()">Leave</button>
+    </div>
+  </div>
+  <div class="content">
+    <div id="crew-active-banner-home"></div>
+    <div class="card">
+      <div class="card-title">Choose a building</div>
+      <div id="crew-building-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">My tasks today</div>
+      <div id="crew-my-tasks"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CREW — BUILDING DETAIL ═══════════ -->
+<div id="s-crew-building" class="screen">
+  <div class="app-header">
+    <div class="logo" id="bld-screen-emoji">⛪</div>
+    <div class="header-titles"><div class="sub" id="bld-screen-sub">Calvary Prescott</div><h1 id="bld-screen-name">Building</h1></div>
+    <div class="header-right">
+      <div class="online-dot" id="crew-bld-dot"></div>
+      <button class="back-btn" onclick="showCrewHome()">← Back</button>
+    </div>
+  </div>
+  <div class="content" id="bld-screen-content">
+  </div>
+</div>
+
+<!-- ═══════════ COORDINATOR ═══════════ -->
+<div id="s-coord" class="screen">
+  <div class="app-header">
+    <div class="logo">📋</div>
+    <div class="header-titles"><div class="sub" id="coord-date-sub"></div><h1>Coordinator</h1></div>
+    <div class="header-right">
+      <div class="online-dot" id="coord-dot"></div>
+      <button class="back-btn" onclick="confirmCloseSession()">End</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <div class="tab active" id="tab-board" onclick="switchTab('board')">Live Board</div>
+      <div class="tab" id="tab-buildings" onclick="switchTab('buildings')">Buildings</div>
+      <div class="tab" id="tab-insights" onclick="switchTab('insights')">Insights</div>
+    </div>
+    <div id="tab-content-board">
+      <div class="summary-grid" id="session-stats" style="margin-bottom:4px;"></div>
+      <div id="coord-board"></div>
+      <button class="btn btn-red" onclick="confirmCloseSession()">Close Session</button>
+    </div>
+    <div id="tab-content-buildings" style="display:none;">
+      <div id="coord-buildings-list"></div>
+      <button class="btn btn-outline" onclick="openModal('add-building-modal')">+ Add Building</button>
+    </div>
+    <div id="tab-content-insights" style="display:none;">
+      <div class="card"><div class="card-title">Crew Performance</div><div id="insights-content"></div></div>
+      <div class="card"><div class="card-title">Notes</div><div id="notes-content"></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="btn btn-outline" onclick="exportCSV()">📊 CSV</button>
+        <button class="btn btn-outline" onclick="exportPDF()">📄 PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ HISTORY ═══════════ -->
+<div id="s-history" class="screen">
+  <div class="app-header">
+    <div class="logo">📂</div>
+    <div class="header-titles"><h1>Session History</h1></div>
+    <div class="header-right"><button class="back-btn" onclick="showScreen('s-home')">← Back</button></div>
+  </div>
+  <div class="content" id="history-content"></div>
+</div>
+
+<!-- ═══════════ CLOSED ═══════════ -->
+<div id="s-closed" class="screen">
+  <div class="app-header"><div class="logo">✅</div><div class="header-titles"><h1>Session Complete</h1></div></div>
+  <div class="content">
+    <div class="card text-center">
+      <div style="font-size:52px;margin-bottom:10px;">🎉</div>
+      <div style="font-size:21px;font-weight:800;color:var(--navy);margin-bottom:6px;">Great work, team!</div>
+    </div>
+    <div class="card" id="closed-summary"></div>
+    <button class="btn btn-navy" onclick="showScreen('s-home')">Back to Home</button>
+  </div>
+</div>
+
+<!-- ═══════════ MODALS ═══════════ -->
+<div class="modal-overlay" id="add-building-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Add Building</div>
+    <label class="label">Name</label>
+    <input class="input" id="new-bld-name" placeholder="e.g. Fellowship Hall" style="margin-bottom:10px;"/>
+    <label class="label">Emoji</label>
+    <input class="input" id="new-bld-emoji" placeholder="🏠" maxlength="2" style="margin-bottom:10px;"/>
+    <label class="label">Tasks (one per line)</label>
+    <textarea class="input" id="new-bld-tasks" rows="5" placeholder="Trash&#10;Sweep&#10;Mop" style="margin-bottom:14px;resize:none;"></textarea>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button class="btn btn-gray" onclick="closeModal('add-building-modal')">Cancel</button>
+      <button class="btn btn-navy" onclick="addBuilding()">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="confirm-title"></div>
+    <p style="font-size:14px;color:var(--text-soft);margin-bottom:16px;" id="confirm-body"></p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button class="btn btn-gray" onclick="closeModal('confirm-modal')">Cancel</button>
+      <button class="btn btn-red" id="confirm-ok-btn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════
+// CONFIG
+// ══════════════════════════════════
+const SB_URL = 'https://skesrmreebjupxxscrlh.supabase.co';
+const SB_KEY = 'sb_publishable_4WZJt-b4luGm8Fz4B96fsg_8x532B1_';
+const SB_H = {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
+const COORD_PIN = '4122';
+const BUILDINGS_KEY = 'cct_buildings_v3';
+
+const DEFAULT_BUILDINGS = [
+  {id:'sanctuary', name:'Sanctuary', emoji:'⛪', tasks:['Trash','Wipe down','Glass','Sweep','Mop','Vacuum','Straighten chairs','Bathrooms']},
+  {id:'kids', name:"Kid's Building", emoji:'🧸', tasks:['Trash','Wipe down','Glass','Sweep','Mop','Vacuum','Bathrooms','Steam nursery']},
+  {id:'youth', name:'Youth Building', emoji:'🎮', tasks:['Trash','Wipe down','Glass','Sweep','Mop','Vacuum','Bathrooms','Check cafe/kitchen']},
+  {id:'offices', name:'Offices', emoji:'🏢', tasks:['Trash','Wipe down','Glass','Sweep','Mop','Vacuum','Bathroom']},
+  {id:'livingroom', name:'Living Room', emoji:'🛋️', tasks:['Trash','Wipe down','Glass','Sweep','Mop','Vacuum','Bathrooms','Set up tables']},
+  {id:'outside', name:'Outside', emoji:'🌿', tasks:['Trash walk','Outside trash cans','Blow vac']},
+];
+
+const AVATAR_COLORS = [
+  ['#d8f3dc','#1b4332'],['#dbeafe','#1e3a5f'],['#fce7f3','#831843'],
+  ['#fef3c7','#78350f'],['#ede9fe','#4c1d95'],['#fee2e2','#7f1d1d'],
+  ['#d1fae5','#064e3b'],['#fdf4ff','#701a75'],['#fff7ed','#7c2d12'],['#f0fdf4','#14532d']
+];
+
+let APP = {
+  role:null, sessionDate:null, myName:null,
+  timers:{}, wsSocket:null, wsHeartbeat:null, wsRef:1,
+  currentBldId:null, coordTab:'board', pinEntry:'', isOnline:true,
+  expandedNotes:{} // taskId -> bool
+};
+let SESSION = null;
+let buildings = loadBuildings();
+
+// ══════════════════════════════════
+// SUPABASE
+// ══════════════════════════════════
+async function sbGet(filter){
+  const r = await fetch(`${SB_URL}/rest/v1/cleaning_sessions?${filter}&limit=1`,{headers:SB_H});
+  if(!r.ok) throw new Error('GET '+r.status);
+  const d = await r.json(); return d[0]||null;
+}
+async function sbUpsert(row){
+  const r = await fetch(`${SB_URL}/rest/v1/cleaning_sessions`,{
+    method:'POST', headers:{...SB_H,'Prefer':'resolution=merge-duplicates,return=representation'},
+    body:JSON.stringify(row)
+  });
+  if(!r.ok){const e=await r.text();throw new Error(e);}
+  const d = await r.json(); return Array.isArray(d)?d[0]:d;
+}
+async function sbPatch(filter,updates){
+  const r = await fetch(`${SB_URL}/rest/v1/cleaning_sessions?${filter}`,{
+    method:'PATCH', headers:SB_H, body:JSON.stringify(updates)
+  });
+  if(!r.ok) throw new Error('PATCH '+r.status);
+  const d = await r.json(); return Array.isArray(d)?d[0]:d;
+}
+async function saveSession(){
+  if(!APP.sessionDate||!SESSION) return;
+  try{
+    await sbPatch(`session_date=eq.${APP.sessionDate}`,{session_data:SESSION});
+    setOnline(true);
+  }catch(e){ setOnline(false); showToast('Save error — check connection'); }
+}
+
+// ══════════════════════════════════
+// REALTIME
+// ══════════════════════════════════
+function connectRealtime(sessionId){
+  disconnectRealtime();
+  const wsUrl = SB_URL.replace('https://','wss://')+'/realtime/v1/websocket?apikey='+SB_KEY+'&vsn=1.0.0';
+  APP.wsSocket = new WebSocket(wsUrl);
+  APP.wsSocket.onopen = ()=>{
+    setOnline(true);
+    APP.wsSocket.send(JSON.stringify({
+      topic:`realtime:public:cleaning_sessions:id=eq.${sessionId}`,
+      event:'phx_join', payload:{config:{broadcast:{self:false},presence:{key:''}}}, ref:String(APP.wsRef++)
+    }));
+    APP.wsHeartbeat = setInterval(()=>{
+      if(APP.wsSocket&&APP.wsSocket.readyState===1)
+        APP.wsSocket.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:String(APP.wsRef++)}));
+    },25000);
+  };
+  APP.wsSocket.onmessage = e=>{
+    try{
+      const msg = JSON.parse(e.data);
+      if(msg.event==='postgres_changes'||msg.event==='UPDATE'||msg.event==='INSERT'){
+        const rec = msg.payload?.data?.record||msg.payload?.record;
+        if(rec&&rec.session_data){ SESSION=rec.session_data; renderCurrentScreen(); }
+      }
+    }catch(err){}
+  };
+  APP.wsSocket.onerror = ()=>setOnline(false);
+  APP.wsSocket.onclose = ()=>{ setOnline(false); if(APP.sessionDate) setTimeout(()=>connectRealtime(sessionId),3000); };
+}
+function disconnectRealtime(){
+  if(APP.wsHeartbeat){clearInterval(APP.wsHeartbeat);APP.wsHeartbeat=null;}
+  if(APP.wsSocket){APP.wsSocket.onclose=null;APP.wsSocket.close();APP.wsSocket=null;}
+}
+
+// ══════════════════════════════════
+// SESSION
+// ══════════════════════════════════
+function todayKey(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+async function joinSession(){
+  const btn=document.getElementById('join-btn');
+  const txt=document.getElementById('join-btn-text');
+  btn.disabled=true; txt.innerHTML='<span class="spinner"></span>';
+  try{
+    const dateKey=todayKey();
+    APP.sessionDate=dateKey;
+    let row=await sbGet(`session_date=eq.${dateKey}`);
+    if(!row){
+      row=await sbUpsert({session_date:dateKey,session_data:{date:dateKey,tasks:[],closed:false,closedAt:null,buildings:buildings}});
+    }
+    SESSION=row.session_data;
+    if(!SESSION.buildings) SESSION.buildings=buildings;
+    connectRealtime(row.id||dateKey);
+    if(APP.role==='crew'){
+      APP.myName=document.getElementById('crew-name-input').value.trim();
+      document.getElementById('crew-name-header').textContent=APP.myName;
+      document.getElementById('crew-date-sub').textContent=formatDate(dateKey);
+      showCrewHome();
+    } else {
+      document.getElementById('coord-date-sub').textContent=formatDate(dateKey);
+      showScreen('s-coord');
+      renderCoordView();
+    }
+  }catch(err){
+    showToast('Connection error: '+err.message);
+    btn.disabled=false; txt.textContent='Join Session';
+  }
+}
+
+function leaveSession(){
+  Object.keys(APP.timers).forEach(stopTimer);
+  disconnectRealtime();
+  APP.sessionDate=null; SESSION=null; APP.currentBldId=null;
+  showScreen('s-home');
+}
+
+// ══════════════════════════════════
+// TASK OPS
+// ══════════════════════════════════
+function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
+
+function startTask(bldId,taskName){
+  const existing=SESSION.tasks.find(t=>t.assignee===APP.myName&&(t.status==='active'||t.status==='paused'));
+  if(existing){showToast('Finish your current task first');return;}
+  const task={id:genId(),buildingId:bldId,taskName,assignee:APP.myName,status:'active',
+    startedAt:Date.now(),pausedAt:null,totalPausedMs:0,completedAt:null,durationMs:null,
+    crewNote:'',coordNote:''};
+  SESSION.tasks.push(task);
+  startTimer(task.id);
+  saveSession();
+  renderBuildingScreen(bldId);
+}
+
+function pauseTask(taskId){
+  const t=SESSION.tasks.find(t=>t.id===taskId);
+  if(!t||t.status!=='active') return;
+  t.pausedAt=Date.now(); t.status='paused';
+  stopTimer(taskId);
+  saveSession(); renderBuildingScreen(t.buildingId);
+}
+
+function resumeTask(taskId){
+  const t=SESSION.tasks.find(t=>t.id===taskId);
+  if(!t||t.status!=='paused') return;
+  t.totalPausedMs=(t.totalPausedMs||0)+(Date.now()-t.pausedAt);
+  t.pausedAt=null; t.status='active';
+  startTimer(taskId);
+  saveSession(); renderBuildingScreen(t.buildingId);
+}
+
+function completeTask(taskId){
+  const t=SESSION.tasks.find(t=>t.id===taskId);
+  if(!t) return;
+  if(t.status==='paused') t.totalPausedMs=(t.totalPausedMs||0)+(Date.now()-t.pausedAt);
+  t.completedAt=Date.now();
+  t.durationMs=t.completedAt-t.startedAt-(t.totalPausedMs||0);
+  t.status='done';
+  // Save note if open
+  const noteEl=document.getElementById('note-'+taskId);
+  if(noteEl) t.crewNote=noteEl.value;
+  stopTimer(taskId);
+  saveSession(); renderBuildingScreen(t.buildingId);
+}
+
+function saveNote(taskId, isCoord){
+  const t=SESSION.tasks.find(t=>t.id===taskId);
+  if(!t) return;
+  const el=document.getElementById((isCoord?'coord-note-':'note-')+taskId);
+  if(!el) return;
+  if(isCoord) t.coordNote=el.value; else t.crewNote=el.value;
+  saveSession();
+  showToast('Note saved');
+}
+
+function deleteTask(taskId){
+  stopTimer(taskId);
+  const bldId=SESSION.tasks.find(t=>t.id===taskId)?.buildingId;
+  SESSION.tasks=SESSION.tasks.filter(t=>t.id!==taskId);
+  saveSession();
+  if(bldId) renderBuildingScreen(bldId);
+  else renderCoordView();
+  closeModal('confirm-modal');
+}
+
+function coordCompleteTask(taskId){
+  const t=SESSION.tasks.find(t=>t.id===taskId);
+  if(!t) return;
+  if(t.status==='paused') t.totalPausedMs=(t.totalPausedMs||0)+(Date.now()-t.pausedAt);
+  t.completedAt=Date.now();
+  t.durationMs=t.completedAt-t.startedAt-(t.totalPausedMs||0);
+  t.status='done';
+  saveSession(); renderCoordView();
+}
+
+// ══════════════════════════════════
+// TIMERS
+// ══════════════════════════════════
+function startTimer(id){
+  stopTimer(id);
+  APP.timers[id]=setInterval(()=>tickTimers(),1000);
+}
+function stopTimer(id){
+  if(APP.timers[id]){clearInterval(APP.timers[id]);delete APP.timers[id];}
+}
+function tickTimers(){
+  if(!SESSION) return;
+  const active=SESSION.tasks.filter(t=>t.status==='active');
+  active.forEach(t=>{
+    const el=document.getElementById('timer-'+t.id);
+    if(el) el.textContent=fmtMs(getElapsed(t));
+  });
+}
+function getElapsed(t){
+  if(t.status==='done') return t.durationMs||0;
+  if(t.status==='paused') return (t.pausedAt-t.startedAt)-(t.totalPausedMs||0);
+  return (Date.now()-t.startedAt)-(t.totalPausedMs||0);
+}
+function fmtMs(ms){
+  const s=Math.floor(ms/1000),m=Math.floor(s/60),h=Math.floor(m/60);
+  if(h>0) return `${h}:${String(m%60).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+  return `${String(m).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+}
+function fmtShort(ms){
+  const m=Math.floor(ms/60000);
+  return m<60?m+'m':Math.floor(m/60)+'h '+(m%60)+'m';
+}
+
+// ══════════════════════════════════
+// CREW — HOME (BUILDING LIST)
+// ══════════════════════════════════
+function showCrewHome(){
+  showScreen('s-crew-home');
+  renderCrewHome();
+}
+
+function renderCrewHome(){
+  if(!SESSION) return;
+  const blds=SESSION.buildings||buildings;
+
+  // Active task mini-banner on home
+  const myActive=SESSION.tasks.find(t=>t.assignee===APP.myName&&(t.status==='active'||t.status==='paused'));
+  const bannerEl=document.getElementById('crew-active-banner-home');
+  if(myActive){
+    const bld=blds.find(b=>b.id===myActive.buildingId);
+    bannerEl.innerHTML=`<div style="background:var(--cyan-light);border:1.5px solid var(--cyan);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="openBuilding('${myActive.buildingId}')">
+      <div style="font-size:22px;">${bld?bld.emoji:'🏠'}</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Active: ${myActive.taskName}</div>
+      <div style="font-size:12px;color:var(--gray);">${bld?bld.name:''} · <span class="pulse" id="home-active-timer">${fmtMs(getElapsed(myActive))}</span></div></div>
+      <div style="font-size:13px;color:var(--cyan);font-weight:700;">Open →</div>
+    </div>`;
+    // Start ticker for home banner
+    if(!APP.timers['home-banner']){
+      APP.timers['home-banner']=setInterval(()=>{
+        const el=document.getElementById('home-active-timer');
+        const t=SESSION&&SESSION.tasks.find(t=>t.assignee===APP.myName&&t.status==='active');
+        if(el&&t) el.textContent=fmtMs(getElapsed(t));
+      },1000);
+    }
+  } else {
+    bannerEl.innerHTML='';
+    stopTimer('home-banner');
+  }
+
+  // Building list
+  const listEl=document.getElementById('crew-building-list');
+  listEl.innerHTML=blds.map(b=>{
+    const bTasks=SESSION.tasks.filter(t=>t.buildingId===b.id&&t.status==='done');
+    const pct=b.tasks.length?Math.round(bTasks.length/b.tasks.length*100):0;
+    const myHere=SESSION.tasks.find(t=>t.assignee===APP.myName&&t.buildingId===b.id&&(t.status==='active'||t.status==='paused'));
+    return `<div class="building-card" onclick="openBuilding('${b.id}')">
+      <div class="bld-emoji">${b.emoji}</div>
+      <div class="bld-info">
+        <div class="bld-name">${b.name}</div>
+        <div class="bld-sub">${bTasks.length} of ${b.tasks.length} done${myHere?` · <span style="color:var(--cyan);font-weight:700;">You're here</span>`:''}</div>
+        <div class="bld-progress"><div class="bld-progress-fill" style="width:${pct}%"></div></div>
+      </div>
+      ${pct===100?`<span class="badge badge-green">✓</span>`:myHere?`<span class="badge badge-cyan pulse">Active</span>`:`<div class="bld-arrow">›</div>`}
+    </div>`;
+  }).join('');
+
+  // My tasks summary
+  const myTasksEl=document.getElementById('crew-my-tasks');
+  const myTasks=SESSION.tasks.filter(t=>t.assignee===APP.myName);
+  if(!myTasks.length){
+    myTasksEl.innerHTML='<p class="text-sm" style="padding:4px 0;">No tasks logged yet — pick a building above.</p>';
+  } else {
+    const totalMs=myTasks.filter(t=>t.status==='done').reduce((s,t)=>s+(t.durationMs||0),0);
+    myTasksEl.innerHTML=myTasks.map(t=>{
+      const bld=blds.find(b=>b.id===t.buildingId);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3f4f6;cursor:pointer;" onclick="openBuilding('${t.buildingId}')">
+        <div style="font-size:18px;">${bld?bld.emoji:'🏠'}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">${t.taskName}</div>
+          <div style="font-size:11px;color:var(--gray);">${bld?bld.name:t.buildingId}</div>
+        </div>
+        <span class="badge ${t.status==='done'?'badge-green':t.status==='paused'?'badge-amber':'badge-cyan'}">${t.status==='done'?fmtShort(t.durationMs||0):t.status}</span>
+      </div>`;
+    }).join('')+`<div class="text-sm" style="margin-top:8px;text-align:right;">Total: <strong>${fmtShort(totalMs)}</strong></div>`;
+  }
+}
+
+// ══════════════════════════════════
+// CREW — BUILDING SCREEN
+// ══════════════════════════════════
+function openBuilding(bldId){
+  APP.currentBldId=bldId;
+  const bld=(SESSION.buildings||buildings).find(b=>b.id===bldId);
+  if(!bld) return;
+  document.getElementById('bld-screen-emoji').textContent=bld.emoji;
+  document.getElementById('bld-screen-name').textContent=bld.name;
+  document.getElementById('bld-screen-sub').textContent='Calvary Prescott';
+  showScreen('s-crew-building');
+  renderBuildingScreen(bldId);
+}
+
+function renderBuildingScreen(bldId){
+  if(!SESSION) return;
+  const bld=(SESSION.buildings||buildings).find(b=>b.id===bldId);
+  if(!bld) return;
+  const content=document.getElementById('bld-screen-content');
+  const myActive=SESSION.tasks.find(t=>t.assignee===APP.myName&&t.buildingId===bldId&&(t.status==='active'||t.status==='paused'));
+
+  let html='';
+
+  // ── Active task banner (pinned top) ──
+  if(myActive){
+    const isPaused=myActive.status==='paused';
+    // Restart timer if needed
+    if(!isPaused&&!APP.timers[myActive.id]) startTimer(myActive.id);
+    html+=`<div class="active-task-banner">
+      <div class="atb-label">${isPaused?'⏸ Paused':'⏱ In Progress'}</div>
+      <div class="atb-task">${myActive.taskName}</div>
+      <div class="atb-timer" id="timer-${myActive.id}">${fmtMs(getElapsed(myActive))}</div>
+      <div class="atb-status">${isPaused?'Timer paused':'Timer running'}</div>
+      <div class="atb-actions">
+        ${isPaused
+          ?`<button class="btn btn-cyan" onclick="resumeTask('${myActive.id}')">▶ Resume</button>`
+          :`<button class="btn btn-ghost" onclick="pauseTask('${myActive.id}')">⏸ Pause</button>`
+        }
+        <button class="btn btn-green" onclick="completeTask('${myActive.id}')">✓ Done</button>
+      </div>
+      <div class="atb-note">
+        <div class="atb-note-label">💬 My note</div>
+        <textarea id="note-${myActive.id}" rows="2" placeholder="Optional note…" onblur="saveNoteInline('${myActive.id}')">${myActive.crewNote||''}</textarea>
+      </div>
+    </div>`;
+  }
+
+  // ── Checklist ──
+  html+=`<div class="card" style="${myActive?'margin-top:0;':''}">
+    <div class="card-title">${bld.tasks.length} tasks</div>`;
+
+  bld.tasks.forEach(taskName=>{
+    const doneTask=SESSION.tasks.find(t=>t.buildingId===bldId&&t.taskName===taskName&&t.status==='done');
+    const myTask=SESSION.tasks.find(t=>t.buildingId===bldId&&t.taskName===taskName&&t.assignee===APP.myName&&(t.status==='active'||t.status==='paused'));
+    const otherActive=SESSION.tasks.find(t=>t.buildingId===bldId&&t.taskName===taskName&&t.assignee!==APP.myName&&(t.status==='active'||t.status==='paused'));
+
+    if(doneTask){
+      const hasNote=doneTask.crewNote||doneTask.coordNote;
+      html+=`<div class="task-item done" onclick="toggleNote('${doneTask.id}')">
+        <div class="task-check">✓</div>
+        <div class="task-body">
+          <div class="task-name">${taskName}</div>
+          <div class="task-meta">Done by ${doneTask.assignee} · ${fmtShort(doneTask.durationMs||0)}</div>
+          ${hasNote?`<div class="task-note-preview">📝 ${doneTask.crewNote||doneTask.coordNote}</div>`:''}
+        </div>
+        <div class="task-time">${fmtShort(doneTask.durationMs||0)}</div>
+      </div>
+      <div id="notebox-${doneTask.id}" style="display:${APP.expandedNotes[doneTask.id]?'block':'none'};" class="task-note-area">
+        <textarea id="note-${doneTask.id}" rows="2" placeholder="Add a note…">${doneTask.crewNote||''}</textarea>
+        <div class="task-note-save"><button class="btn btn-navy btn-sm" onclick="saveNote('${doneTask.id}',false)">Save Note</button></div>
+      </div>`;
+    } else if(myTask){
+      // Already shown in active banner — just show a subtle row
+      html+=`<div class="task-item mine-${myTask.status}">
+        <div class="task-check">${myTask.status==='paused'?'⏸':'▶'}</div>
+        <div class="task-body">
+          <div class="task-name">${taskName}</div>
+          <div class="task-meta">${myTask.status==='paused'?'Paused — tap Resume above':'In progress — see timer above'}</div>
+        </div>
+        <div class="task-time" id="timer-inline-${myTask.id}">${fmtMs(getElapsed(myTask))}</div>
+      </div>`;
+    } else if(otherActive){
+      html+=`<div class="task-item" style="cursor:default;">
+        <div class="task-check"></div>
+        <div class="task-body">
+          <div class="task-name">${taskName}</div>
+          <div class="task-meta">In progress by ${otherActive.assignee}</div>
+        </div>
+        <span class="badge badge-cyan">Active</span>
+      </div>`;
+    } else {
+      // Available to start
+      const canStart=!myActive;
+      html+=`<div class="task-item" onclick="${canStart?`startTask('${bldId}','${taskName.replace(/'/g,"\\'")}')` :'showToast(\"Finish your current task first\")'}">
+        <div class="task-check"></div>
+        <div class="task-body"><div class="task-name">${taskName}</div>${!canStart?`<div class="task-meta">Finish current task first</div>`:''}</div>
+        ${canStart?`<div style="font-size:12px;color:var(--cyan);font-weight:700;">Start →</div>`:''}
+      </div>`;
+    }
+  });
+
+  html+=`</div>`;
+  content.innerHTML=html;
+
+  // Update dot
+  const dot=document.getElementById('crew-bld-dot');
+  if(dot) dot.classList.toggle('offline',!APP.isOnline);
+}
+
+function toggleNote(taskId){
+  APP.expandedNotes[taskId]=!APP.expandedNotes[taskId];
+  const box=document.getElementById('notebox-'+taskId);
+  if(box) box.style.display=APP.expandedNotes[taskId]?'block':'none';
+}
+
+function saveNoteInline(taskId){
+  const t=SESSION.tasks.find(t=>t.id===taskId);
+  if(!t) return;
+  const el=document.getElementById('note-'+taskId);
+  if(el) t.crewNote=el.value;
+  saveSession();
+}
+
+// ══════════════════════════════════
+// COORDINATOR
+// ══════════════════════════════════
+function renderCoordView(){
+  if(!SESSION) return;
+  renderSessionStats();
+  renderCoordBoard();
+  renderCoordBuildingsList();
+  renderInsights();
+  SESSION.tasks.filter(t=>t.status==='active').forEach(t=>{
+    if(!APP.timers[t.id]) startTimer(t.id);
+  });
+}
+
+function renderSessionStats(){
+  const crew=[...new Set(SESSION.tasks.map(t=>t.assignee))];
+  const done=SESSION.tasks.filter(t=>t.status==='done').length;
+  const totalMs=SESSION.tasks.filter(t=>t.status==='done').reduce((s,t)=>s+(t.durationMs||0),0);
+  document.getElementById('session-stats').innerHTML=`
+    <div class="summary-stat"><div class="val">${crew.length}</div><div class="lbl">Crew</div></div>
+    <div class="summary-stat"><div class="val">${done}</div><div class="lbl">Done</div></div>
+    <div class="summary-stat"><div class="val">${fmtShort(totalMs)}</div><div class="lbl">Total hrs</div></div>`;
+}
+
+function renderCoordBoard(){
+  const blds=SESSION.buildings||buildings;
+  document.getElementById('coord-board').innerHTML=blds.map(b=>{
+    const done=SESSION.tasks.filter(t=>t.buildingId===b.id&&t.status==='done').length;
+    const active=SESSION.tasks.filter(t=>t.buildingId===b.id&&(t.status==='active'||t.status==='paused'));
+    const pct=b.tasks.length?Math.round(done/b.tasks.length*100):0;
+    return `<div class="coord-bld">
+      <div class="coord-bld-header">
+        <div class="emoji">${b.emoji}</div>
+        <div class="name">${b.name}</div>
+        <span class="badge ${pct===100?'badge-green':active.length?'badge-cyan':'badge-gray'}">${done}/${b.tasks.length}</span>
+      </div>
+      <div style="height:4px;background:#e5e7eb;"><div style="height:100%;background:var(--cyan);width:${pct}%;transition:width .4s;"></div></div>
+      <div class="coord-bld-body">
+        ${active.map(t=>{
+          const c=AVATAR_COLORS[hashName(t.assignee)%AVATAR_COLORS.length];
+          return `<div class="crew-row">
+            <div class="avatar" style="background:${c[0]};color:${c[1]}">${initials(t.assignee)}</div>
+            <div class="crew-info">
+              <div class="crew-name">${t.assignee}</div>
+              <div class="crew-task-name">${t.taskName} · <span id="timer-${t.id}">${fmtMs(getElapsed(t))}</span></div>
+              ${t.coordNote?`<div style="font-size:11px;color:var(--amber);">📋 ${t.coordNote}</div>`:''}
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-green btn-sm" onclick="coordCompleteTask('${t.id}')">✓</button>
+              <button class="btn btn-gray btn-sm" onclick="openCoordTaskModal('${t.id}')">⋯</button>
+            </div>
+          </div>`;
+        }).join('')}
+        ${!active.length&&done<b.tasks.length?`<div class="text-sm" style="padding:6px 0;">No one active here</div>`:''}
+        ${pct===100?`<div class="badge badge-green" style="margin-top:4px;">✓ All tasks complete</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderCoordBuildingsList(){
+  const blds=SESSION.buildings||buildings;
+  document.getElementById('coord-buildings-list').innerHTML=blds.map((b,i)=>`
+    <div class="card" style="margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <div style="font-size:22px;">${b.emoji}</div>
+        <div style="font-weight:700;flex:1;font-size:15px;">${b.name}</div>
+        <button class="btn btn-red btn-sm" onclick="removeBuilding(${i})">✕</button>
+      </div>
+      <div class="text-sm">${b.tasks.join(' · ')}</div>
+    </div>`).join('');
+}
+
+function renderInsights(){
+  const crew=[...new Set(SESSION.tasks.map(t=>t.assignee))];
+  const insEl=document.getElementById('insights-content');
+  if(!crew.length){insEl.innerHTML='<p class="text-sm">No data yet.</p>';return;}
+  insEl.innerHTML=crew.map(name=>{
+    const mt=SESSION.tasks.filter(t=>t.assignee===name&&t.status==='done');
+    const total=mt.reduce((s,t)=>s+(t.durationMs||0),0);
+    const avg=mt.length?total/mt.length:0;
+    const c=AVATAR_COLORS[hashName(name)%AVATAR_COLORS.length];
+    return `<div class="insight-row">
+      <div class="avatar" style="background:${c[0]};color:${c[1]}">${initials(name)}</div>
+      <div style="flex:1;font-size:13px;font-weight:600;">${name}</div>
+      <div class="text-sm">${mt.length} tasks · avg ${fmtShort(avg)}</div>
+    </div>`;
+  }).join('');
+
+  const notes=SESSION.tasks.filter(t=>t.coordNote||t.crewNote);
+  document.getElementById('notes-content').innerHTML=notes.length
+    ?notes.map(t=>`<div class="note-item"><strong>${t.taskName}</strong> (${t.assignee})<br>
+      ${t.coordNote?'📋 '+t.coordNote+'<br>':''}${t.crewNote?'💬 '+t.crewNote:''}</div>`).join('')
+    :'<p class="text-sm">No notes added.</p>';
+}
+
+function openCoordTaskModal(taskId){
+  const t=SESSION.tasks.find(t=>t.id===taskId);
+  if(!t) return;
+  // Inline modal-like approach using confirm modal
+  document.getElementById('confirm-title').textContent=t.taskName;
+  document.getElementById('confirm-body').innerHTML='';
+  const body=document.getElementById('confirm-body');
+  body.innerHTML=`<div style="font-size:13px;color:var(--text-soft);margin-bottom:10px;">Assigned to <strong>${t.assignee}</strong></div>
+    <label class="label">Coordinator Note</label>
+    <input class="input" id="coord-note-${t.id}" value="${t.coordNote||''}" placeholder="Add note…" style="margin-bottom:0;"/>`;
+  document.getElementById('confirm-ok-btn').textContent='Save Note';
+  document.getElementById('confirm-ok-btn').className='btn btn-navy';
+  document.getElementById('confirm-ok-btn').onclick=()=>{
+    saveNote(t.id,true);
+    closeModal('confirm-modal');
+    renderCoordView();
+  };
+  openModal('confirm-modal');
+}
+
+// ══════════════════════════════════
+// CLOSE SESSION
+// ══════════════════════════════════
+function confirmCloseSession(){
+  showConfirm('Close Session?','This ends the session for everyone.',closeSession);
+}
+async function closeSession(){
+  SESSION.closed=true; SESSION.closedAt=Date.now();
+  await saveSession();
+  const hist=JSON.parse(localStorage.getItem('cct_history')||'[]');
+  hist.unshift({date:APP.sessionDate,tasks:SESSION.tasks,closedAt:SESSION.closedAt});
+  localStorage.setItem('cct_history',JSON.stringify(hist.slice(0,20)));
+  const tasks=SESSION.tasks;
+  const done=tasks.filter(t=>t.status==='done');
+  const crew=[...new Set(tasks.map(t=>t.assignee))];
+  const totalMs=done.reduce((s,t)=>s+(t.durationMs||0),0);
+  document.getElementById('closed-summary').innerHTML=`<div class="summary-grid">
+    <div class="summary-stat"><div class="val">${crew.length}</div><div class="lbl">Crew</div></div>
+    <div class="summary-stat"><div class="val">${done.length}</div><div class="lbl">Tasks</div></div>
+    <div class="summary-stat"><div class="val">${fmtShort(totalMs)}</div><div class="lbl">Hours</div></div>
+  </div>`;
+  disconnectRealtime();
+  Object.keys(APP.timers).forEach(stopTimer);
+  APP.sessionDate=null; SESSION=null;
+  showScreen('s-closed');
+}
+
+// ══════════════════════════════════
+// BUILDINGS MGMT
+// ══════════════════════════════════
+function loadBuildings(){
+  try{return JSON.parse(localStorage.getItem(BUILDINGS_KEY)||'null')||DEFAULT_BUILDINGS;}
+  catch(e){return DEFAULT_BUILDINGS;}
+}
+function addBuilding(){
+  const name=document.getElementById('new-bld-name').value.trim();
+  const emoji=document.getElementById('new-bld-emoji').value.trim()||'🏠';
+  const tasks=document.getElementById('new-bld-tasks').value.split('\n').map(t=>t.trim()).filter(Boolean);
+  if(!name||!tasks.length){showToast('Name and tasks required');return;}
+  const bld={id:name.toLowerCase().replace(/\s+/g,'_')+Date.now(),name,emoji,tasks};
+  const blds=SESSION.buildings||buildings;
+  blds.push(bld);
+  if(SESSION) SESSION.buildings=blds;
+  buildings=blds;
+  localStorage.setItem(BUILDINGS_KEY,JSON.stringify(blds));
+  saveSession();
+  closeModal('add-building-modal');
+  renderCoordView();
+}
+function removeBuilding(idx){
+  showConfirm('Remove Building?','This cannot be undone.',()=>{
+    const blds=SESSION.buildings||buildings;
+    blds.splice(idx,1);
+    if(SESSION) SESSION.buildings=blds;
+    buildings=blds;
+    localStorage.setItem(BUILDINGS_KEY,JSON.stringify(blds));
+    saveSession(); renderCoordView();
+  });
+}
+
+// ══════════════════════════════════
+// EXPORT
+// ══════════════════════════════════
+function exportCSV(){
+  if(!SESSION) return;
+  const rows=[['Assignee','Building','Task','Status','Duration (min)','Started','Completed','Crew Note','Coord Note']];
+  SESSION.tasks.forEach(t=>{
+    const b=(SESSION.buildings||buildings).find(b=>b.id===t.buildingId);
+    rows.push([t.assignee,b?b.name:t.buildingId,t.taskName,t.status,
+      t.durationMs?Math.round(t.durationMs/60000):'',
+      t.startedAt?new Date(t.startedAt).toLocaleTimeString():'',
+      t.completedAt?new Date(t.completedAt).toLocaleTimeString():'',
+      t.crewNote||'',t.coordNote||'']);
+  });
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='cleaning-'+APP.sessionDate+'.csv'; a.click();
+}
+function exportPDF(){
+  if(!SESSION) return;
+  const win=window.open('','_blank');
+  const rows=SESSION.tasks.map(t=>{
+    const b=(SESSION.buildings||buildings).find(b=>b.id===t.buildingId);
+    return `<tr><td>${t.assignee}</td><td>${b?b.name:t.buildingId}</td><td>${t.taskName}</td><td>${t.status}</td><td>${t.durationMs?Math.round(t.durationMs/60000)+'m':'-'}</td><td>${t.crewNote||t.coordNote||''}</td></tr>`;
+  }).join('');
+  win.document.write(`<html><head><title>Cleaning ${APP.sessionDate}</title>
+    <style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:6px 8px;font-size:12px;}th{background:#1E4976;color:#fff;}</style></head>
+    <body><h2>Calvary Prescott — Cleaning Session ${APP.sessionDate}</h2>
+    <table><tr><th>Assignee</th><th>Building</th><th>Task</th><th>Status</th><th>Duration</th><th>Note</th></tr>${rows}</table></body></html>`);
+  win.print();
+}
+
+// ══════════════════════════════════
+// HISTORY
+// ══════════════════════════════════
+function renderHistory(){
+  const el=document.getElementById('history-content');
+  const hist=JSON.parse(localStorage.getItem('cct_history')||'[]');
+  if(!hist.length){el.innerHTML='<div class="card text-center text-sm">No sessions yet.</div>';return;}
+  el.innerHTML=hist.map(s=>{
+    const done=s.tasks.filter(t=>t.status==='done').length;
+    const crew=[...new Set(s.tasks.map(t=>t.assignee))];
+    const totalMs=s.tasks.filter(t=>t.status==='done').reduce((sum,t)=>sum+(t.durationMs||0),0);
+    return `<div class="card" style="margin-bottom:10px;">
+      <div style="font-weight:700;margin-bottom:8px;">${formatDate(s.date)}</div>
+      <div class="summary-grid">
+        <div class="summary-stat"><div class="val">${crew.length}</div><div class="lbl">Crew</div></div>
+        <div class="summary-stat"><div class="val">${done}</div><div class="lbl">Tasks</div></div>
+        <div class="summary-stat"><div class="val">${fmtShort(totalMs)}</div><div class="lbl">Hours</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='s-history') renderHistory();
+}
+function renderCurrentScreen(){
+  if(!SESSION) return;
+  if(APP.role==='crew'){
+    const active=document.querySelector('.screen.active');
+    if(active&&active.id==='s-crew-building'&&APP.currentBldId) renderBuildingScreen(APP.currentBldId);
+    else renderCrewHome();
+  }
+  if(APP.role==='coord') renderCoordView();
+}
+function switchTab(tab){
+  APP.coordTab=tab;
+  ['board','buildings','insights'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('active',t===tab);
+    document.getElementById('tab-content-'+t).style.display=t===tab?'':'none';
+  });
+  if(tab==='insights') renderInsights();
+}
+function selectRole(role){
+  APP.role=role; APP.pinEntry='';
+  document.getElementById('role-crew').classList.toggle('selected',role==='crew');
+  document.getElementById('role-coord').classList.toggle('selected',role==='coord');
+  document.getElementById('name-card').style.display=role==='crew'?'block':'none';
+  document.getElementById('coord-pin-card').style.display=role==='coord'?'block':'none';
+  if(role==='coord') buildPinPad();
+  checkHomeReady();
+}
+function buildPinPad(){
+  const grid=document.getElementById('home-pin-grid');
+  grid.innerHTML='';
+  [1,2,3,4,5,6,7,8,9,'',0,'⌫'].forEach(k=>{
+    const btn=document.createElement('button');
+    btn.className='pin-btn'; btn.textContent=String(k);
+    if(k==='') btn.style.visibility='hidden';
+    btn.onclick=()=>{
+      if(k==='⌫') APP.pinEntry=APP.pinEntry.slice(0,-1);
+      else if(APP.pinEntry.length<4) APP.pinEntry+=String(k);
+      document.getElementById('home-pin-display').textContent=APP.pinEntry.replace(/./g,'● ').trim()||'_ _ _ _';
+      checkHomeReady();
+    };
+    grid.appendChild(btn);
+  });
+}
+function checkHomeReady(){
+  const btn=document.getElementById('join-btn');
+  const txt=document.getElementById('join-btn-text');
+  if(!APP.role){btn.disabled=true;txt.textContent='Select a role to continue';return;}
+  if(APP.role==='crew'){
+    const n=document.getElementById('crew-name-input').value.trim();
+    btn.disabled=!n; txt.textContent=n?'Join Session →':'Enter your name';return;
+  }
+  const ok=APP.pinEntry===COORD_PIN;
+  btn.disabled=!ok; txt.textContent=ok?'Enter as Coordinator →':'Enter PIN to continue';
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function showConfirm(title,body,onOk){
+  document.getElementById('confirm-title').textContent=title;
+  document.getElementById('confirm-body').textContent=body;
+  document.getElementById('confirm-ok-btn').textContent='Confirm';
+  document.getElementById('confirm-ok-btn').className='btn btn-red';
+  document.getElementById('confirm-ok-btn').onclick=()=>{closeModal('confirm-modal');onOk();};
+  openModal('confirm-modal');
+}
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2500);
+}
+function setOnline(on){
+  APP.isOnline=on;
+  document.querySelectorAll('.online-dot').forEach(d=>d.classList.toggle('offline',!on));
+}
+function formatDate(key){
+  if(!key) return '';
+  const [y,m,d]=key.split('-');
+  return new Date(+y,+m-1,+d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+}
+function initials(n){return n.split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);}
+function hashName(n){let h=0;for(let i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))&0xffffffff;return Math.abs(h);}
+
+// ══════════════════════════════════
+// INIT
+// ══════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('home-date').textContent=formatDate(todayKey());
+  document.querySelectorAll('.modal-overlay').forEach(o=>{
+    o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+  });
+});
+</script>
+</body>
+</html>
